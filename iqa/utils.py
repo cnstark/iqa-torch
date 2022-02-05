@@ -78,3 +78,23 @@ def reorder_image(img: torch.Tensor, input_order: str, output_order: str) -> tor
             if not 'N' + output_order.replace('N', '') == output_order:
                 out_img = reorder_image(out_img, 'N' + output_order.replace('N', ''), output_order)
     return out_img
+
+
+def crop_border(img: torch.Tensor, crop_size: int, order: str = 'NCHW') -> torch.Tensor:
+    """Crop borders of image.
+
+    Args:
+        img (torch.Tensor): Input image.
+        crop_size (int): Crop border for each end of height and weight.
+        order (str, optional): The order of input image. Defaults to 'NCHW'.
+
+    Returns:
+        torch.Tensor: Output image.
+    """
+    if crop_size == 0:
+        return img
+    else:
+        if order in ('HW, CHW, NHW, NCHW'):
+            return img[..., crop_size:-crop_size, crop_size:-crop_size]
+        else:
+            return img[..., crop_size:-crop_size, crop_size:-crop_size, :]
