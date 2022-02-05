@@ -71,9 +71,9 @@ def reorder_image(img: torch.Tensor, input_order: str, output_order: str) -> tor
             # CHW->(HWC, NHW, NHWC), HWC->(CHW, NHW, NCHW), NCHW->HWC, NHWC->CHW
             if input_order.find('N') == -1:
                 temp_order = 'N' + input_order
+                out_img = reorder_image(out_img, input_order, temp_order)
             else:
                 temp_order = input_order
-            out_img = reorder_image(out_img, input_order, temp_order)
             out_img = reorder_image(out_img, temp_order, 'N' + output_order.replace('N', ''))
             if not 'N' + output_order.replace('N', '') == output_order:
                 out_img = reorder_image(out_img, 'N' + output_order.replace('N', ''), output_order)
