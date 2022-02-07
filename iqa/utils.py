@@ -1,6 +1,31 @@
 import torch
 
 
+def convert_image_dtype(img: torch.Tensor, dtype: torch.dtype) -> torch.Tensor:
+    """Convert the type and range of the image according to `dtype`.
+    It converts the image to desired type and range. If `dtype` is torch.uint8,
+    images will be converted to torch.uint8 type with range [0, 255]. If
+    `dtype` is torch.float32, it converts the image to torch.float32 type with
+    range [0, 1].
+
+    Args:
+        img (torch.Tensor): Input image.
+        dtype (torch.dtype): Dtype of output image.
+
+    Returns:
+        torch.Tensor: output image with `dtype`
+    """
+    if img.dtype not in (torch.uint8, torch.float32):
+        raise TypeError(f'The img type should be torch.float32 or torch.uint8, but got {img.dtype}')
+    
+    if img.dtype == dtype:
+        return img
+    elif dtype == torch.uint8:
+        return (img.clamp(0., 1.) * 255.).to(torch.uint8)
+    else:
+        return img.clamp(0., 255.).to(torch.float32) / 255.
+
+
 def reorder_image(img: torch.Tensor, input_order: str, output_order: str) -> torch.Tensor:
     """Reorder input image to other order.
 
