@@ -21,9 +21,9 @@ def convert_image_dtype(img: torch.Tensor, dtype: torch.dtype) -> torch.Tensor:
     if img.dtype == dtype:
         return img
     elif dtype == torch.uint8:
-        return (img.clamp(0., 1.) * 255.).to(torch.uint8)
+        return (img.clamp(0., 1.) * 255.).round().to(torch.uint8)
     else:
-        return img.clamp(0., 255.).to(torch.float32) / 255.
+        return img.to(torch.float32) / 255.
 
 
 def reorder_image(img: torch.Tensor, input_order: str, output_order: str) -> torch.Tensor:
