@@ -36,10 +36,16 @@ def psnr(
 
             1. torch.uint8 type with range [0, 255];
             2. torch.float32 type with range [0, 1].
-    
+
     Note:
         The order of images must be specified when `crop_size` is
         not 0 or `test_y_channel` is True.
+
+    Note:
+        If `test_y_channel` is True, `img1` and `img2` should be:
+
+            1. RGB image with 3 channel;
+            2. Gray image with 1 channel.
 
     Args:
         img1 (torch.Tensor): Image 1.
@@ -89,6 +95,12 @@ class PSNR(nn.Module):
         Note:
             The order of images must be specified when `crop_size` is
             not 0 or `test_y_channel` is True.
+
+        Note:
+        If `test_y_channel` is True, `img1` and `img2` should be:
+
+            1. RGB image with 3 channel;
+            2. Gray image with 1 channel.
 
         Args:
             crop_size (int, optional): Crop border for each end of height and weight. Defaults to 0.
