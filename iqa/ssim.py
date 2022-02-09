@@ -89,8 +89,7 @@ def ssim(
     if window is None:
         window = _create_ssim_window(11).to(img1.device)
 
-    _, c, _, _ = img1.size()
-    window = window.repeat([c, 1, 1, 1])
+    window = window.repeat([img1.size(1), 1, 1, 1])
 
     return _apply_ssim(img1, img2, window, 1., True)
 
@@ -100,7 +99,7 @@ class SSIM(nn.Module):
         self,
         crop_size: int = 0,
         test_y_channel: bool = False,
-        input_order: str = None,
+        input_order: str = 'NCHW',
     ):
         super().__init__()
         self.crop_size = crop_size
