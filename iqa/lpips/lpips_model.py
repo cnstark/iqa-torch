@@ -1,4 +1,5 @@
 # https://github.com/richzhang/PerceptualSimilarity/blob/master/lpips/lpips.py
+# https://github.com/richzhang/PerceptualSimilarity/blob/master/lpips/__init__.py
 import os
 import inspect
 
