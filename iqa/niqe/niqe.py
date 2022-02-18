@@ -8,7 +8,7 @@ from .niqe_core import _apply_niqe
 
 def niqe(
     img: torch.Tensor,
-    crop_size: int = 0,
+    border_crop_size: int = 0,
     test_y_channel: bool = False,
     input_order: str = 'NCHW',
 ) -> torch.Tensor:
@@ -31,7 +31,7 @@ def niqe(
 
     Args:
         img (torch.Tensor): Input image whose quality needs to be computed.
-        crop_size (int, optional): Crop border for each end of height and width.
+        border_crop_size (int, optional): Crop border for each end of height and width.
             Defaults to 0.
         test_y_channel (bool, optional): Test on Y channel of YCbCr.
             Defaults to False, which means that the image will test on gray.
@@ -40,8 +40,8 @@ def niqe(
     Returns:
         torch.Tensor: NIQE result.
     """
-    if crop_size != 0:
-        img = crop_border(img, crop_size, input_order)
+    if border_crop_size != 0:
+        img = crop_border(img, border_crop_size, input_order)
 
     img = convert_image_dtype(img, torch.float32)
 
@@ -63,7 +63,7 @@ def niqe(
 class NIQE(nn.Module):
     def __init__(
         self,
-        crop_size: int = 0,
+        border_crop_size: int = 0,
         test_y_channel: bool = False,
         input_order: str = None,
     ):
@@ -74,14 +74,14 @@ class NIQE(nn.Module):
         MATLAB codes: http://live.ece.utexas.edu/research/quality/niqe_release.zip
 
         Args:
-            crop_size (int, optional): Crop border for each end of height and width.
+            border_crop_size (int, optional): Crop border for each end of height and width.
             Defaults to 0.
             test_y_channel (bool, optional): Test on Y channel of YCbCr.
                 Defaults to False, which means that the image will test on gray.
             input_order (str, optional): _description_. Defaults to 'NCHW'.
         """
         super().__init__()
-        self.crop_size = crop_size
+        self.border_crop_size = border_crop_size
         self.test_y_channel = test_y_channel
         self.input_order = input_order
 
@@ -101,4 +101,4 @@ class NIQE(nn.Module):
         Returns:
             torch.Tensor: NIQE result.
         """
-        return niqe(img1, self.crop_size, self.test_y_channel, self.input_order)
+        return niqe(img1, self.border_crop_size, self.test_y_channel, self.input_order)
