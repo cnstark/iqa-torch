@@ -1,6 +1,9 @@
 import torch
 
 
+__all__ = ['convert_image_dtype', 'reorder_image', 'crop_border']
+
+
 def convert_image_dtype(img: torch.Tensor, dtype: torch.dtype) -> torch.Tensor:
     """Convert the type and range of the image according to `dtype`.
     It converts the image to desired type and range. If `dtype` is torch.uint8,

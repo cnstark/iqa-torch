@@ -8,7 +8,7 @@ import cv2
 import numpy as np
 import torch
 
-from iqa.csc import rgb2gray, rgb2ycbcr, rgb2y, ycbcr2rgb
+from iqa.utils import rgb2gray, rgb2ycbcr, rgb2y, ycbcr2rgb
 from libs.basicsr_matlab_functions import rgb2ycbcr as rgb2ycbcr_bsr
 from libs.basicsr_matlab_functions import ycbcr2rgb as ycbcr2rgb_bsr
 
