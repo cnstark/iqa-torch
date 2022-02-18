@@ -25,7 +25,7 @@ class LPIPSTestCase(unittest.TestCase):
 
                 self.assertLess((lpips_iqa - lpips_official).item(), 1e-8)
 
-    def test_lpips_func(self):
+    def test_lpips_module(self):
         _lpips = LPIPS()
         _lpips_official = LPIPS_Official()
         for order, shape in IMAGE_SHAPES:
