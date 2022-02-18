@@ -56,7 +56,7 @@ def _apply_ssim(
 def ssim(
     img1: torch.Tensor,
     img2: torch.Tensor,
-    crop_size: int = 0,
+    border_crop_size: int = 0,
     test_y_channel: bool = False,
     input_order: str = 'NCHW',
     window: torch.Tensor = None,
@@ -64,9 +64,9 @@ def ssim(
     if img1.size() != img2.size():
         raise ValueError(f'Image shapes are different: {img1.shape}, {img2.shape}.')
 
-    if crop_size != 0:
-        img1 = crop_border(img1, crop_size, input_order)
-        img2 = crop_border(img2, crop_size, input_order)
+    if border_crop_size != 0:
+        img1 = crop_border(img1, border_crop_size, input_order)
+        img2 = crop_border(img2, border_crop_size, input_order)
 
     img1 = convert_image_dtype(img1, torch.float32)
     img2 = convert_image_dtype(img2, torch.float32)
@@ -97,12 +97,12 @@ def ssim(
 class SSIM(nn.Module):
     def __init__(
         self,
-        crop_size: int = 0,
+        border_crop_size: int = 0,
         test_y_channel: bool = False,
         input_order: str = 'NCHW',
     ):
         super().__init__()
-        self.crop_size = crop_size
+        self.border_crop_size = border_crop_size
         self.test_y_channel = test_y_channel
         self.input_order = input_order
 
@@ -112,7 +112,7 @@ class SSIM(nn.Module):
         return ssim(
             img1,
             img2,
-            self.crop_size,
+            self.border_crop_size,
             self.test_y_channel,
             self.input_order,
             self.window,

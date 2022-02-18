@@ -12,7 +12,7 @@ __all__ = ['lpips', 'LPIPS']
 def _preprocess_imgs(
     img1: torch.Tensor,
     img2: torch.Tensor,
-    crop_size: int = 0,
+    border_crop_size: int = 0,
     input_order: str = 'NCHW',
 ) -> Tuple[torch.Tensor]:
     """Preprocessing images for calculate LPIPS.
@@ -20,7 +20,7 @@ def _preprocess_imgs(
     Args:
         img1 (torch.Tensor): Image 1.
         img2 (torch.Tensor): Image 2.
-        crop_size (int, optional): Crop border for each end of height and weight. Defaults to 0.
+        border_crop_size (int, optional): Crop border for each end of height and weight. Defaults to 0.
         input_order (str, optional): The order of input image. Defaults to 'NCHW'.
 
     Returns:
@@ -29,9 +29,9 @@ def _preprocess_imgs(
     if img1.size() != img2.size():
         raise ValueError(f'Image shapes are different: {img1.shape}, {img2.shape}.')
 
-    if crop_size != 0:
-        img1 = crop_border(img1, crop_size, input_order)
-        img2 = crop_border(img2, crop_size, input_order)
+    if border_crop_size != 0:
+        img1 = crop_border(img1, border_crop_size, input_order)
+        img2 = crop_border(img2, border_crop_size, input_order)
 
     img1 = convert_image_dtype(img1, torch.float32)
     img2 = convert_image_dtype(img2, torch.float32)
@@ -47,7 +47,7 @@ def lpips(
     img2: torch.Tensor,
     net: str = 'alex',
     version: str = '0.1',
-    crop_size: int = 0,
+    border_crop_size: int = 0,
     input_order: str = 'NCHW',
 ) -> torch.Tensor:
     """Calculate LPIPS (Learned Perceptual Image Patch Similarity).
@@ -70,13 +70,13 @@ def lpips(
             available. Defaults to 'alex'.
         version (str, optional): LPIPS version, corresponds to old arxiv v1
             (https://arxiv.org/abs/1801.03924v1). Defaults to '0.1'.
-        crop_size (int, optional): Crop border for each end of height and weight. Defaults to 0.
+        border_crop_size (int, optional): Crop border for each end of height and weight. Defaults to 0.
         input_order (str, optional): The order of input image. Defaults to 'NCHW'.
 
     Returns:
         torch.Tensor: LPIPS result.
     """
-    img1, img2 = _preprocess_imgs(img1, img2, crop_size, input_order)
+    img1, img2 = _preprocess_imgs(img1, img2, border_crop_size, input_order)
 
     lpips_model = LPIPSModel(net=net, version=version)
     lpips_model.to(img1.device)
@@ -89,7 +89,7 @@ class LPIPS(nn.Module):
         self,
         net: str = 'alex',
         version: str = '0.1',
-        crop_size: int = 0,
+        border_crop_size: int = 0,
         input_order: str = 'NCHW',
     ):
         """LPIPS (Learned Perceptual Image Patch Similarity) calculator.
@@ -101,12 +101,12 @@ class LPIPS(nn.Module):
                 available. Defaults to 'alex'.
             version (str, optional): LPIPS version, corresponds to old arxiv v1
                 (https://arxiv.org/abs/1801.03924v1). Defaults to '0.1'.
-            crop_size (int, optional): Crop border for each end of height and weight. Defaults to 0.
+            border_crop_size (int, optional): Crop border for each end of height and weight. Defaults to 0.
             input_order (str, optional): The order of input image. Defaults to 'NCHW'.
         """
         super().__init__()
 
-        self.crop_size = crop_size
+        self.border_crop_size = border_crop_size
         self.input_order = input_order
 
         self.lpips_model = LPIPSModel(net=net, version=version)
@@ -127,6 +127,6 @@ class LPIPS(nn.Module):
         Returns:
             torch.Tensor: LPIPS result.
         """
-        img1, img2 = _preprocess_imgs(img1, img2, self.crop_size, self.input_order)
+        img1, img2 = _preprocess_imgs(img1, img2, self.border_crop_size, self.input_order)
 
         return self.lpips_model(img1, img2)

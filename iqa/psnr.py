@@ -25,7 +25,7 @@ def _apply_psnr(img1: torch.Tensor, img2: torch.Tensor, peak: float = 1.0) -> to
 def psnr(
     img1: torch.Tensor,
     img2: torch.Tensor,
-    crop_size: int = 0,
+    border_crop_size: int = 0,
     test_y_channel: bool = False,
     input_order: str = None,
 ) -> torch.Tensor:
@@ -38,7 +38,7 @@ def psnr(
             2. torch.float32 type with range [0, 1].
 
     Note:
-        The order of images must be specified when `crop_size` is
+        The order of images must be specified when `border_crop_size` is
         not 0 or `test_y_channel` is True.
 
     Note:
@@ -50,7 +50,7 @@ def psnr(
     Args:
         img1 (torch.Tensor): Image 1.
         img2 (torch.Tensor): Image 2.
-        crop_size (int, optional): Crop border for each end of height and weight. Defaults to 0.
+        border_crop_size (int, optional): Crop border for each end of height and weight. Defaults to 0.
         test_y_channel (bool, optional): Test on Y channel of YCbCr. Defaults to False.
         input_order (str, optional): The order of input image. Defaults to None.
 
@@ -60,11 +60,11 @@ def psnr(
     if img1.size() != img2.size():
         raise ValueError(f'Image shapes are different: {img1.shape}, {img2.shape}.')
 
-    if crop_size != 0:
+    if border_crop_size != 0:
         if input_order is None:
             raise ValueError(f'Please specify the order of images.')
-        img1 = crop_border(img1, crop_size, input_order)
-        img2 = crop_border(img2, crop_size, input_order)
+        img1 = crop_border(img1, border_crop_size, input_order)
+        img2 = crop_border(img2, border_crop_size, input_order)
 
     img1 = convert_image_dtype(img1, torch.float32)
     img2 = convert_image_dtype(img2, torch.float32)
@@ -86,14 +86,14 @@ def psnr(
 class PSNR(nn.Module):
     def __init__(
         self,
-        crop_size: int = 0,
+        border_crop_size: int = 0,
         test_y_channel: bool = False,
         input_order: str = None,
     ):
         """PSNR calculator
 
         Note:
-            The order of images must be specified when `crop_size` is
+            The order of images must be specified when `border_crop_size` is
             not 0 or `test_y_channel` is True.
 
         Note:
@@ -103,16 +103,16 @@ class PSNR(nn.Module):
             2. Gray image with 1 channel.
 
         Args:
-            crop_size (int, optional): Crop border for each end of height and weight. Defaults to 0.
+            border_crop_size (int, optional): Crop border for each end of height and weight. Defaults to 0.
             test_y_channel (bool, optional): Test on Y channel of YCbCr. Defaults to False.
             input_order (str, optional): The order of input image. Defaults to None.
         """
         super().__init__()
-        self.crop_size = crop_size
+        self.border_crop_size = border_crop_size
         self.test_y_channel = test_y_channel
         self.input_order = input_order
 
-        if crop_size != 0 or test_y_channel:
+        if border_crop_size != 0 or test_y_channel:
             if input_order is None:
                 raise ValueError(f'Please specify the order of images.')
 
@@ -132,4 +132,4 @@ class PSNR(nn.Module):
         Returns:
             torch.Tensor: PSNR value.
         """
-        return psnr(img1, img2, self.crop_size, self.test_y_channel, self.input_order)
+        return psnr(img1, img2, self.border_crop_size, self.test_y_channel, self.input_order)

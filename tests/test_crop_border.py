@@ -20,10 +20,10 @@ TEST_SET = (
 
 class TestCropBorder(unittest.TestCase):
     def test_crop_border(self):
-        for order, input_shape, crop_size, output_shape in TEST_SET:
-            with self.subTest(order=order, input_shape=input_shape, crop_size=crop_size):
+        for order, input_shape, border_crop_size, output_shape in TEST_SET:
+            with self.subTest(order=order, input_shape=input_shape, border_crop_size=border_crop_size):
                 src = torch.randn(input_shape)
-                dst = crop_border(src, crop_size, order)
+                dst = crop_border(src, border_crop_size, order)
                 self.assertEqual(tuple(dst.size()), output_shape)
 
 
