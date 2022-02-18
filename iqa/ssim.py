@@ -4,8 +4,7 @@ import torch
 from torch import nn
 import torch.nn.functional as F
 
-from .csc import rgb2y
-from .utils import crop_border, convert_image_dtype, reorder_image
+from .utils import rgb2y, crop_border, convert_image_dtype, reorder_image
 
 
 def _create_ssim_window(window_size: int) -> torch.Tensor:
