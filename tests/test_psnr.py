@@ -1,13 +1,12 @@
 import os
 import sys
 import unittest
-import functools
 sys.path.append(os.getcwd())
 
 import numpy as np
 import torch
 
-from iqa.psnr import psnr
+from iqa import psnr
 from libs.basicsr_psnr_ssim import calculate_psnr
 
 IMAGE_SHAPES = (
