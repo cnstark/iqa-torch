@@ -6,7 +6,7 @@ sys.path.append(os.getcwd())
 import numpy as np
 import torch
 
-from iqa.ssim import ssim
+from iqa import ssim
 from libs.basicsr_psnr_ssim import calculate_ssim
 
 IMAGE_SHAPES = (

@@ -6,7 +6,7 @@ sys.path.append(os.getcwd())
 import numpy as np
 import torch
 
-from iqa.niqe import niqe
+from iqa import niqe
 from libs.basicsr_niqe import calculate_niqe
 
 

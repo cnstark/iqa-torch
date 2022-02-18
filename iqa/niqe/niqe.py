@@ -5,6 +5,9 @@ from ..utils import rgb2gray, rgb2y, crop_border, convert_image_dtype, reorder_i
 from .niqe_core import _apply_niqe
 
 
+__all__ = ['niqe', 'NIQE']
+
+
 def niqe(
     img: torch.Tensor,
     border_crop_size: int = 0,

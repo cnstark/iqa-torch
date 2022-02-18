@@ -7,6 +7,9 @@ import torch.nn.functional as F
 from .utils import rgb2y, crop_border, convert_image_dtype, reorder_image
 
 
+__all__ = ['ssim', 'SSIM']
+
+
 def _create_ssim_window(window_size: int) -> torch.Tensor:
     def gaussian(_window_size, sigma):
         gauss = torch.Tensor(

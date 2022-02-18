@@ -7,7 +7,7 @@ sys.path.append(os.getcwd())
 import torch
 
 from lpips import LPIPS as LPIPS_Official
-from iqa.lpips import lpips, LPIPS
+from iqa import lpips, LPIPS
 
 
 IMAGE_SHAPES = (('NCHW', (1, 3, 128, 128)),)

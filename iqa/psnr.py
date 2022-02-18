@@ -5,6 +5,9 @@ from torch.nn import functional as F
 from .utils import rgb2y, crop_border, convert_image_dtype, reorder_image
 
 
+__all__ = ['psnr', 'PSNR']
+
+
 def _apply_psnr(img1: torch.Tensor, img2: torch.Tensor, peak: float = 1.0) -> torch.Tensor:
     """PSNR (Peak Signal-to-Noise Ratio).
 
