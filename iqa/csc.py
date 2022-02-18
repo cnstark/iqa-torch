@@ -7,6 +7,27 @@ RGB2YCBCR_MAT = torch.Tensor([
     [24.966, 112.0, -18.214]
 ]) / 255.
 RGB2YCBCR_BIAS = torch.Tensor([16, 128, 128]) / 255.
+RGB2GRAY_MAT = torch.Tensor([0.299, 0.587, 0.114])[:, None]
+
+
+def rgb2gray(img: torch.Tensor) -> torch.Tensor:
+    """Convert a RGB image to a gray image.
+
+    Ref: https://docs.opencv.org/3.4/de/d25/imgproc_color_conversions.html#color_convert_rgb_gray
+
+    Args:
+        img (torch.Tensor): The input image. It accepts:
+            dtype: torch.float32
+            range: [0, 1]
+            order: 'HWC' or 'NHWC'
+
+    Returns:
+        torch.Tensor: The converted gray image.
+    """
+    out_img = torch.mm(img.reshape(-1, 3), RGB2GRAY_MAT)
+    size = list(img.size())
+    size[-1] = 1
+    return out_img.reshape(size)
 
 
 def rgb2y(img: torch.Tensor) -> torch.Tensor:
