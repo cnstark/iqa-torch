@@ -1,0 +1,29 @@
+name: PyPI Publish
+
+on: push
+
+jobs:
+  build-n-publish:
+    runs-on: ubuntu-latest
+    if: startsWith(github.event.ref, 'refs/tags')
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.9
+      - name: Upgrade pip
+        run: | 
+          pip install pip --upgrade
+          pip install wheel
+      - name: Install dependencies
+        run: |
+          pip install torch==1.9.1+cpu torchvision==0.10.1+cpu torchaudio==0.9.1 -f https://download.pytorch.org/whl/torch_stable.html
+          pip install -r requirements.txt
+      - name: Build for distribution
+        run: python setup.py bdist_wheel
+      - name: Publish distribution to PyPI
+        uses: pypa/gh-action-pypi-publish@master
+        with:
+          password: ${{ secrets.PYPI_IQA_TORCH }}
