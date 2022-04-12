@@ -27,7 +27,7 @@ def rgb2gray(img: torch.Tensor) -> torch.Tensor:
     Returns:
         torch.Tensor: The converted gray image.
     """
-    out_img = torch.mm(img.reshape(-1, 3), RGB2GRAY_MAT)
+    out_img = torch.mm(img.reshape(-1, 3), RGB2GRAY_MAT.to(img.device))
     size = list(img.size())
     size[-1] = 1
     return out_img.reshape(size)
@@ -49,7 +49,7 @@ def rgb2y(img: torch.Tensor) -> torch.Tensor:
     Returns:
         torch.Tensor: The converted Y channel image.
     """
-    out_img = torch.mm(img.reshape(-1, 3), RGB2YCBCR_MAT[:, 0:1]) + RGB2YCBCR_BIAS[0]
+    out_img = torch.mm(img.reshape(-1, 3), RGB2YCBCR_MAT[:, 0:1].to(img.device)) + RGB2YCBCR_BIAS[0].to(img.device)
     size = list(img.size())
     size[-1] = 1
     return out_img.reshape(size)
@@ -71,7 +71,7 @@ def rgb2ycbcr(img: torch.Tensor) -> torch.Tensor:
     Returns:
         torch.Tensor: The converted YCbCr image.
     """
-    out_img = torch.mm(img.reshape(-1, 3), RGB2YCBCR_MAT) + RGB2YCBCR_BIAS
+    out_img = torch.mm(img.reshape(-1, 3), RGB2YCBCR_MAT.to(img.device)) + RGB2YCBCR_BIAS.to(img.device)
     return out_img.reshape(img.size())
 
 
@@ -91,5 +91,5 @@ def ycbcr2rgb(img: torch.Tensor) -> torch.Tensor:
     Returns:
         torch.Tensor: The converted RGB image.
     """
-    out_img = torch.mm(img.reshape(-1, 3) - RGB2YCBCR_BIAS, RGB2YCBCR_MAT.inverse())
+    out_img = torch.mm(img.reshape(-1, 3) - RGB2YCBCR_BIAS.to(img.device), RGB2YCBCR_MAT.inverse().to(img.device))
     return out_img.reshape(img.size())
