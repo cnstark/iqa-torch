@@ -23,7 +23,7 @@ class LPIPSTestCase(unittest.TestCase):
                 lpips_iqa = lpips(img1, img2)
                 lpips_official = LPIPS_Official()(img1, img2)
 
-                self.assertLess((lpips_iqa - lpips_official).item(), 1e-8)
+                self.assertLess(abs((lpips_iqa - lpips_official).item()), 1e-8)
 
     def test_lpips_module(self):
         _lpips = LPIPS()
@@ -36,7 +36,7 @@ class LPIPSTestCase(unittest.TestCase):
                 lpips_iqa = _lpips(img1, img2)
                 lpips_official = _lpips_official(img1, img2)
 
-                self.assertLess((lpips_iqa - lpips_official).item(), 1e-8)
+                self.assertLess(abs((lpips_iqa - lpips_official).item()), 1e-8)
 
 
 if __name__ == '__main__':

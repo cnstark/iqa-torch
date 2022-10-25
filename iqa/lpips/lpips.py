@@ -78,7 +78,7 @@ def lpips(
     """
     img1, img2 = _preprocess_imgs(img1, img2, border_crop_size, input_order)
 
-    lpips_model = LPIPSModel(net=net, pnet_rand=True, version=version)
+    lpips_model = LPIPSModel(net=net, version=version)
     lpips_model.to(img1.device)
 
     return lpips_model(img1, img2)
@@ -109,7 +109,7 @@ class LPIPS(nn.Module):
         self.border_crop_size = border_crop_size
         self.input_order = input_order
 
-        self.lpips_model = LPIPSModel(net=net, pnet_rand=True, version=version)
+        self.lpips_model = LPIPSModel(net=net, version=version)
 
     def forward(self, img1: torch.Tensor, img2: torch.Tensor) -> torch.Tensor:
         """Calculate LPIPS (Learned Perceptual Image Patch Similarity).

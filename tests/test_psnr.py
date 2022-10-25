@@ -29,7 +29,7 @@ class PSNRTestCase(unittest.TestCase):
                 psnr_bsr = calculate_psnr(img1_np * 255., img2_np * 255., 4, order)
                 psnr_iqa = psnr(img1_torch, img2_torch, 4, input_order=order)
 
-                self.assertLess(psnr_bsr - psnr_iqa.item(), 1e-5)
+                self.assertLess(abs(psnr_bsr - psnr_iqa.item()), 1e-5)
 
     def test_psnr_rgb_uint8(self):
         for order, shape in IMAGE_SHAPES:
@@ -42,7 +42,7 @@ class PSNRTestCase(unittest.TestCase):
                 psnr_bsr = calculate_psnr(img1_np, img2_np, 4, order)
                 psnr_iqa = psnr(img1_torch, img2_torch, 4, input_order=order)
 
-                self.assertLess(psnr_bsr - psnr_iqa.item(), 1e-5)
+                self.assertLess(abs(psnr_bsr - psnr_iqa.item()), 1e-5)
 
     def test_psnr_y_float32(self):
         for order, shape in IMAGE_SHAPES:
@@ -55,7 +55,7 @@ class PSNRTestCase(unittest.TestCase):
                 psnr_bsr = calculate_psnr(img1_np * 255., img2_np * 255., 4, order, True)
                 psnr_iqa = psnr(img1_torch, img2_torch, 4, test_y_channel=True, input_order=order)
 
-                self.assertLess(psnr_bsr - psnr_iqa.item(), 1e-5)
+                self.assertLess(abs(psnr_bsr - psnr_iqa.item()), 1e-5)
 
     def test_psnr_y_uint8(self):
         for order, shape in IMAGE_SHAPES:
@@ -68,7 +68,7 @@ class PSNRTestCase(unittest.TestCase):
                 psnr_bsr = calculate_psnr(img1_np, img2_np, 4, order, True)
                 psnr_iqa = psnr(img1_torch, img2_torch, 4, test_y_channel=True, input_order=order)
 
-                self.assertLess(psnr_bsr - psnr_iqa.item(), 1e-5)
+                self.assertLess(abs(psnr_bsr - psnr_iqa.item()), 1e-5)
 
 
 if __name__ == '__main__':
